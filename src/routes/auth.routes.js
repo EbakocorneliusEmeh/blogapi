@@ -1,35 +1,3 @@
-// import express from 'express';
-// import { body } from 'express-validator';
-// import { register, login, me } from '../controllers/auth.controller.js';
-// import { handleValidation } from '../middleware/validate.middleware.js';
-// import { authenticateToken } from '../middleware/auth.middleware.js';
-
-
-
-// const router = express.Router();
-
-// router.post(
-//   '/register',
-//   [
-//     body('username').isLength({ min: 3 }),
-//     body('email').isEmail(),
-//     body('password').isLength({ min: 6 })
-//   ],
-//   handleValidation,
-//   register
-// );
-
-// router.post(
-//   '/login',
-//   [body('email').isEmail(), body('password').exists()],
-//   handleValidation,
-//   login
-// );
-
-// router.get('/me', authenticateToken, me);
-
-// export default router;
-
 
 
 import express from 'express';

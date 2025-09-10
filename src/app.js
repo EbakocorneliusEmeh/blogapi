@@ -15,7 +15,6 @@ const app = express();
 app.use(express.json());
 app.use(morgan('dev'));
 
-// rate limiter (basic)
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
   max: 120,
@@ -23,17 +22,15 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// Routes
 app.use('/auth', authRoutes);
 app.use('/users', usersRoutes);
 app.use('/posts', postsRoutes);
 app.use('/comments', commentsRoutes);
 
-// search
+
 import { searchController } from './controllers/post.controller.js';
 app.get('/search', searchController);
 
-// global error handler (must be last)
 app.use(errorHandler);
 
 export default app;

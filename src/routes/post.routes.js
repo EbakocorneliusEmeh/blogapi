@@ -1,38 +1,5 @@
 
 
-// import express from "express";
-// import { body } from "express-validator";
-// import {
-//   getPosts,
-//   getPostById,
-//   createPost,
-//   updatePost,
-//   deletePost,
-// } from "../controllers/post.controller.js";
-// import { authenticateToken } from "../middleware/auth.middleware.js";
-// import { handleValidation } from "../middleware/validate.middleware.js";
-
-// const router = express.Router();
-
-// router.get("/", getPosts);
-// router.get("/:id", getPostById);
-
-// router.post(
-//   "/",
-//   authenticateToken,
-//   [body("title").notEmpty(), body("content").notEmpty()],
-//   handleValidation,
-//   createPost
-// );
-
-// router.put("/:id", authenticateToken, updatePost);
-// router.delete("/:id", authenticateToken, deletePost);
-
-// export default router;
-
-
-
-
 import express from "express";
 import { body } from "express-validator";
 import {

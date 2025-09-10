@@ -1,11 +1,8 @@
 import pool from "./db.js";
 
-/**
- * Creates all necessary tables if they do not exist.
- */
+
 export const createTables = async () => {
   try {
-    // Users table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
@@ -17,7 +14,6 @@ export const createTables = async () => {
       );
     `);
 
-    // Posts table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS posts (
         id SERIAL PRIMARY KEY,
@@ -28,7 +24,6 @@ export const createTables = async () => {
       );
     `);
 
-    // Comments table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS comments (
         id SERIAL PRIMARY KEY,
@@ -39,8 +34,8 @@ export const createTables = async () => {
       );
     `);
 
-    console.log("✅ All necessary tables created (or already exist).");
+    console.log(" All necessary tables created (or already exist).");
   } catch (err) {
-    console.error("❌ Error creating tables:", err.message);
+    console.error(" Error creating tables:", err.message);
   }
 };

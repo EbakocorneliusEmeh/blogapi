@@ -7,6 +7,8 @@ import postRoutes from "./routes/post.routes.js";
 import commentRoutes from "./routes/comment.routes.js";
 import uploadRoutes from "./routes/upload.routes.js";
 
+import { createTables } from "../src/db/createTables.js"; 
+
 dotenv.config();
 
 const app = express();
@@ -27,6 +29,18 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+
+// ✅ Start server only after tables are created
+const startServer = async () => {
+  try {
+    await createTables(); // create tables if they don't exist
+    console.log("Tables ensured. Starting server...");
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error("Failed to start server:", err);
+  }
+};
+
+startServer();

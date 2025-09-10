@@ -3,11 +3,15 @@ import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 dotenv.config();
+import { createTables } from './db/createTables.js';
 
 import authRoutes from './routes/auth.routes.js';
 import usersRoutes from './routes/users.routes.js';
 import postsRoutes from './routes/post.routes.js';
 import commentsRoutes from './routes/comment.routes.js';
+
+createTables();
+
 import { errorHandler } from './middleware/error.middleware.js';
 
 const app = express();

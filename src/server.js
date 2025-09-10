@@ -16,6 +16,13 @@ const app = express();
 app.use(express.json());
 app.use(morgan("dev"));
 
+//  Welcome route
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "Welcome to the Blog API! "
+  });
+});
+
 app.use("/auth", authRoutes);
 app.use("/posts", postRoutes);
 app.use("/", commentRoutes);
@@ -30,13 +37,14 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 4000;
 
-// ✅ Start server only after tables are created
+// Start server only after tables are created
 const startServer = async () => {
   try {
     await createTables(); // create tables if they don't exist
     console.log("Tables ensured. Starting server...");
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
+      console.log("Welcome! Your Blog API is live at /");
     });
   } catch (err) {
     console.error("Failed to start server:", err);

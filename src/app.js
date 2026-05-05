@@ -1,40 +1,48 @@
-import express from 'express';
-import morgan from 'morgan';
-import rateLimit from 'express-rate-limit';
-import dotenv from 'dotenv';
+import express from "express";
+import morgan from "morgan";
+import rateLimit from "express-rate-limit";
+import dotenv from "dotenv";
+
+import authRoutes from "./routes/auth.routes.js";
+import usersRoutes from "./routes/users.routes.js";
+import postRoutes from "./routes/post.routes.js";
+import commentRoutes from "./routes/comment.routes.js";
+import { searchController } from "./controllers/post.controller.js";
+import { errorHandler } from "./middleware/error.middleware.js";
+import { createTables } from "./db/createTables.js";
+
 dotenv.config();
-import { createTables } from './db/createTables.js';
-
-import authRoutes from './routes/auth.routes.js';
-import usersRoutes from './routes/users.routes.js';
-import postsRoutes from './routes/post.routes.js';
-import commentsRoutes from './routes/comment.routes.js';
-
-createTables();
-
-import { errorHandler } from './middleware/error.middleware.js';
 
 const app = express();
 
 app.use(express.json());
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 
 const limiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute
+  windowMs: 1 * 60 * 1000,
   max: 120,
-  message: { error: 'Too many requests, try again later.' }
+  message: { error: "Too many requests, try again later." }
 });
+
 app.use(limiter);
 
-app.use('/auth', authRoutes);
-app.use('/users', usersRoutes);
-app.use('/posts', postsRoutes);
-app.use('/comments', commentsRoutes);
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "Welcome to the Blog API!"
+  });
+});
 
+app.use("/auth", authRoutes);
+app.use("/users", usersRoutes);
+app.use("/posts", postRoutes);
+app.use("/", commentRoutes);
 
-import { searchController } from './controllers/post.controller.js';
-app.get('/search', searchController);
+app.get("/search", searchController);
 
 app.use(errorHandler);
+
+export const tablesReady = createTables().catch((err) => {
+  console.error("Failed to ensure database tables:", err.message);
+});
 
 export default app;

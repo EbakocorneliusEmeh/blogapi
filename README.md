@@ -1,234 +1,193 @@
+# Blog API
 
-### Blog API — RESTful Backend with Commenting System
+Blog API is a Node.js and Express REST API backed by PostgreSQL. It supports user authentication, post management, comments, profile uploads, and keyword search. The project is organized as a small backend service with route, controller, middleware, and database layers.
 
-A full-featured blogging API built with Node.js, Express, and PostgreSQL, supporting authentication, posts, comments, profile uploads, and search. This project is designed to simulate a real-world backend service with modular architecture, secure routing, relational data modeling, and proper documentation.
+## What the project does
 
-### Project Overview
+This API lets users:
 
-This backend API powers a simple blogging platform. Users can register, log in, upload a profile picture, create posts, comment on posts, update their content, and perform searches.
-It demonstrates essential backend engineering concepts:
+- Register and log in with JWT authentication
+- View their profile information
+- Create, read, update, and delete blog posts
+- Add and remove comments on posts
+- Upload a profile picture
+- Search posts by title or content
 
-REST API Design
+The app also includes request validation, rate limiting, parameterized SQL queries, and automatic table creation on startup.
 
-SQL schema modeling
+## Features
 
-Authentication with JWT
+- Authentication with bcrypt and JWT
+- CRUD for posts
+- Comments on posts
+- Profile upload support
+- Search endpoint for posts
+- Input validation with `express-validator`
+- Rate limiting with `express-rate-limit`
+- PostgreSQL connection pooling
+- Global error handling
 
-File uploads
+## Project Structure
 
-One-to-many relationships (posts → comments)
-
-Error handling & validation
-
-Pagination and search
-
-Modular route & controller architecture
-
-### Features (Use Cases)
-### Authentication
-
-Register user
-
-Login user
-
-Get logged-in user info (/me)
-
-Upload profile picture
-
-### Blog Posts
-
-Create a post
-
-Retrieve all posts with pagination
-
-View a single post with comments (JOIN query)
-
-Update a post (partial updates supported)
-
-Delete a post (and cascade delete comments)
-
-### Comments
-
-Retrieve all comments for a post
-
-Add a new comment to a post
-
-Delete specific comments
-
-### Search
-
-Search for posts using keywords (title or content)
-
-### Additional Features
-
-Connection pooling
-
-Input validation
-
-SQL injection protection
-
-Global error handler
-
-Rate limiting
-
-Sample SQL seed data
-
-Unit tests for several endpoints
-
-### Database Schema (PostgreSQL)
-Tables
-
-users
-
-posts
-
-comments
-
-Relationships
-
-One user → many posts
-
-One post → many comments
-
-Cascade delete ensures no orphaned comments
-
-Provided SQL Scripts
-
-schema.sql → creates all tables
-
-seed.sql → inserts sample users, posts, and comments
-
-drop.sql → teardown script
-
-### API Endpoints
-### Authentication
-### Method	     Endpoint	                Description
-POST	     /auth/register	               Register a new user
-POST	     /auth/login                 	Login and receive JWT
-GET	         /me Get                             the authenticated user's info
-POST	     /profile_upload	                    Upload profile picture
-### Posts
-### Method	       Endpoint	                              Description
-GET	         /posts?limit=10&offset=0	                 List posts with pagination
-GET	         /posts/:id	                                  Get a single post with comments
-POST	    /posts	                                      Create a post (validated)
-PUT     	/posts/:id	                                   Update (partial updates allowed)
-DELETE	    /posts/:id	                                       Delete post + comments (cascade)
-### Comments
-### Method	   Endpoint                                 	Description
-GET	       /posts/:id/comments	                                  Get comments for a post
-POST	    /posts/:id/comments                                 	Add comment to a post
-DELETE	    /comments/:id	                            Delete specific comment
-### Search
-### Method	        Endpoint                                 	Description
-GET	                /search?q=keyword                                             	Search posts by title/content
-
-
-### Project Structure
+```text
 src/
-│── controllers/
-│── routes/
-│── middleware/
-│── db/
-│   ├── db.js
-│   ├── initTables.js
-│── uploads/ (profile pictures)
-│── server.js
+  app.js
+  server.js
+  controllers/
+  db/
+  middleware/
+  routes/
+  tests/
+migrations/
 README.md
-.env
 
-### Environment Variables
 
-Create a .env file:
+## Implemented Endpoints
 
+### Authentication
+
+- `POST /auth/register` - Register a new user
+- `POST /auth/login` - Log in and receive a JWT
+- `GET /auth/me` - Get the authenticated user's profile
+
+### Users
+
+- `POST /users/profile_upload` - Upload a profile picture
+
+### Posts
+
+- `GET /posts?limit=10&offset=0` - Get all posts with pagination
+- `GET /posts/:id` - Get a single post and its comments
+- `POST /posts` - Create a new post
+- `PUT /posts/:id` - Update a post
+- `DELETE /posts/:id` - Delete a post
+
+### Comments
+
+- `GET /posts/:id/comments` - Get comments for a post
+- `POST /posts/:id/comments` - Add a comment to a post
+- `DELETE /comments/:id` - Delete a comment
+
+### Search
+
+- `GET /search?q=keyword` - Search posts by title or content
+
+## Database
+
+The application uses PostgreSQL. Tables are created automatically on startup by `rc/db/createTables.js
+
+Database tables:
+
+- users
+- posts
+- comments
+
+Relationships:
+
+- One user can create many posts
+- One user can write many comments
+- One post can have many comments
+- Deleting a post cascades to its comments
+
+## Environment Variables
+
+Create a `.env` file in the project root with the values you need for your database:
+
+env
 PORT=4000
-DATABASE_URL=postgres://USER:PASSWORD@localhost:5432/blogapi
 JWT_SECRET=your_secret_here
 
-### Running the Project
+# Option 1: use DATABASE_URL
+DATABASE_URL=postgres://USER:PASSWORD@localhost:5432/blogapi
 
-1 Clone the project
-git clone  https://github.com/EbakocorneliusEmeh/blogapi.git
+# Option 2: use individual connection fields
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=blogapi
+DB_USER=postgres
+DB_PASSWORD=your_password
 
-2. Install dependencies
+# Optional upload folder
+UPLOAD_DIR=uploads
+
+
+## How To Run The Project
+
+1. Install dependencies
+
+bash
 npm install
 
-3. Initialize database
-node src/db/initTables.js
 
-4. Start development server
+2. Set up your PostgreSQL database and `.env`
+
+3. Start the development server
+
+bash
 npm run dev
 
 
-Server runs on:
+4. Or start the production server
 
+```bash
+npm start
+```
+
+The server runs on:
+
+text
 http://localhost:4000
 
-### Testing the API
 
-Use Insomnia  Postman or curl.
+## Example Requests
 
-Example. Register User
+### Register
+
+http
 POST /auth/register
+Content-Type: application/json
 
+json
 {
   "username": "john",
   "email": "john@example.com",
   "password": "123456"
 }
 
-Example. Auth Header
+
+### Login
+
+http
+POST /auth/login
+Content-Type: application/json
+
+
+json
+{
+  "email": "john@example.com",
+  "password": "123456"
+}
+
+
+### Authenticated Request
+
+http
 Authorization: Bearer <jwt_token>
 
-Example. Upload profile picture
 
-Form-data →
+### Upload Profile Picture
 
-key. profile   (type: file)
+Use `multipart/form-data` with:
 
-### Search Example
-GET /search?q=node
+- key: `profile`
+- value: file upload
 
-### Unit Tests
+## Notes
 
-Includes tests for.
+- The app uses parameterized SQL queries to reduce SQL injection risk.
+- Comments are deleted automatically when their parent post is deleted.
+- If you want to reset the database manually, use the SQL files in `migrations/`.
 
-Authentication
+## Submission Reminder
 
-Posts creation
-
-Comment creation
-
-Run tests:
-
-npm test
-
-### Code Quality & Best Practices Followed
-
- Modular routes/controllers
- Parameterized SQL queries (Prevents SQL injection)
- Global error handler
- bcrypt password hashing
- JWT authentication
- Async/await everywhere
- Pagination & search for efficiency
-
-### Sample Data Included
-
-3 users
-
-5 posts
-
-10 comments
-
-Added via seed.sql
-
-### Assumptions
-
-Users can only edit/delete their own posts/comments
-
-File uploads stored in /uploads directory
-
-Cascade delete for comments when a post is removed
-
-No admin roles required
+If your reviewer asked for a pull request link, make sure the PR URL is included in the submission notes or description.

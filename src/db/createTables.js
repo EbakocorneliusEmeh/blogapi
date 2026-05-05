@@ -37,5 +37,6 @@ export const createTables = async () => {
     console.log(" All necessary tables created (or already exist).");
   } catch (err) {
     console.error(" Error creating tables:", err.message);
+    throw err;
   }
 };

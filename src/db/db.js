@@ -5,15 +5,18 @@ dotenv.config();
 
 const { Pool } = pkg;
 
-const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: String(process.env.DB_PASSWORD),
-});
+const useConnectionString = Boolean(process.env.DATABASE_URL);
 
-console.log('DB_USER:', process.env.DB_USER);
-console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
+const pool = useConnectionString
+  ? new Pool({
+      connectionString: process.env.DATABASE_URL,
+    })
+  : new Pool({
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      database: process.env.DB_NAME,
+      user: process.env.DB_USER,
+      password: String(process.env.DB_PASSWORD),
+    });
 
 export default pool;

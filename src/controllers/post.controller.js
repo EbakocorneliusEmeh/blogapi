@@ -104,3 +104,26 @@ export const deletePost = async (req, res, next) => {
     next(err);
   }
 };
+
+// Search posts by title or content
+export const searchController = async (req, res, next) => {
+  try {
+    const { q } = req.query;
+
+    if (!q || !q.trim()) {
+      return res.status(400).json({ error: "Search query 'q' is required" });
+    }
+
+    const result = await pool.query(
+      `SELECT *
+       FROM posts
+       WHERE title ILIKE $1 OR content ILIKE $1
+       ORDER BY created_at DESC`,
+      [`%${q.trim()}%`]
+    );
+
+    res.json(result.rows);
+  } catch (err) {
+    next(err);
+  }
+};

@@ -91,24 +91,7 @@ Relationships:
 
 ## Environment Variables
 
-Create a `.env` file in the project root with the values you need for your database:
-
-env
-PORT=4000
-JWT_SECRET=your_secret_here
-
-# Option 1: use DATABASE_URL
-DATABASE_URL=postgres://USER:PASSWORD@localhost:5432/blogapi
-
-# Option 2: use individual connection fields
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=blogapi
-DB_USER=postgres
-DB_PASSWORD=your_password
-
-# Optional upload folder
-UPLOAD_DIR=uploads
+Copy `.env.example` to `.env` in the project root and fill in your local values.
 
 
 ## How To Run The Project

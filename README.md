@@ -174,3 +174,6 @@ Use `multipart/form-data` with:
 ## Submission Reminder
 
 If your reviewer asked for a pull request link, make sure the PR URL is included in the submission notes or description.
+
+
+### How to clone  https://github.com/EbakocorneliusEmeh/blogapi.git
